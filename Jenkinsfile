@@ -4,7 +4,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git credentialsId: 'github', url: 'https://github.com/kishanth94/javawebapplication'
+                git credentialsId: 'github', url: 'https://github.com/Sky2five/javawebapplication'
             }
         }
 	/*
@@ -30,7 +30,7 @@ pipeline{
             steps{
                 script{
                 // Get Home Path of Maven 
-                def mvnHome = tool name: 'maven-3', type: 'maven'
+                def mvnHome = tool name: 'my-maven', type: 'maven'
                 sh "${mvnHome}/bin/mvn clean package"
                 }
             }
@@ -64,13 +64,13 @@ pipeline{
 	    
         stage("Deploy to Tomcat Server"){
             steps{
-                sshagent(['tomcat-keypair']) {
+                sshagent(['aws-keypair']) {
                 sh """
 		    echo $WORKSPACE
-		    mv target/*.war target/javawebapplication.war
-                    scp -o StrictHostKeyChecking=no target/javawebapplication.war  ec2-user@172.31.15.49:/opt/tomcat8/webapps/
-                    ssh ec2-user@172.31.15.49 /opt/tomcat8/bin/shutdown.sh
-                    ssh ec2-user@172.31.15.49 /opt/tomcat8/bin/startup.sh
+		    mv target/*.war target/jeev.war
+                    scp -o StrictHostKeyChecking=no target/jeev.war  ec2-user@172.31.19.72:/opt/apache-tomcat-9.0.65/bin/webapps/
+                    ssh ec2-user@172.31.19.72 /opt/apache-tomcat-9.0.65/bin/shutdown.sh
+                    ssh ec2-user@172.31.19.72 /opt/apache-tomcat-9.0.65/bin/bin/startup.sh
                 
                 """
                 }
@@ -95,5 +95,3 @@ pipeline{
 		     //body: "Something is wrong with ${env.BUILD_URL}"
 	    //}
     //}
-
-
