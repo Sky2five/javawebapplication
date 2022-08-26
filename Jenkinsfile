@@ -7,6 +7,7 @@ pipeline{
                 git credentialsId: 'github', url: 'https://github.com/Sky2five/javawebapplication'
             }
         }
+    }
 	/*
         stage('Quality Gate Status Check'){
             steps{
@@ -76,9 +77,7 @@ pipeline{
             
             }
         }
-    }  
-}
-    //post {
+        //post {
 	    //always {
 	    //echo 'Deleting the Workspace'
 	    //deleteDir() /* Clean Up our Workspace */
@@ -94,3 +93,4 @@ pipeline{
 		     //body: "Something is wrong with ${env.BUILD_URL}"
 	    //}
     //}
+		}
