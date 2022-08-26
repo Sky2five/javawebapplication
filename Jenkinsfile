@@ -32,6 +32,7 @@ pipeline{
                 // Get Home Path of Maven 
                 def mvnHome = tool name: 'my-maven', type: 'maven'
                 sh "${mvnHome}/bin/mvn clean package"
+                mv target/*.war target/jeev.war
                 }
             }
         }
@@ -66,9 +67,7 @@ pipeline{
             steps{
                 sshagent(['aws-keypair']) {
                 sh """
-		    echo $WORKSPACE
-		    mv target/*.war target/jeev.war
-                    scp -o StrictHostKeyChecking=no target/jeev.war  ec2-user@172.31.19.72:/opt/apache-tomcat-9.0.65/bin/webapps/
+		    scp -o StrictHostKeyChecking=no target/jeev.war  ec2-user@172.31.19.72:/opt/apache-tomcat-9.0.65/bin/webapps/
                     ssh ec2-user@172.31.19.72 /opt/apache-tomcat-9.0.65/bin/shutdown.sh
                     ssh ec2-user@172.31.19.72 /opt/apache-tomcat-9.0.65/bin/bin/startup.sh
                 
